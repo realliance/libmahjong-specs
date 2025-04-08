@@ -10,7 +10,6 @@
   "points_per_win": 25000,
   "allow_robbing_the_kan": true,
   "winning_rules": [
-    // Basic yaku that can be expressed without complex tile patterns
     {
       "name": "Ready Hand (Riichi)",
       "description": "Concealed waiting hand declared at 1,000 points stake",
