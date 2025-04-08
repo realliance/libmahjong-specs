@@ -1,0 +1,771 @@
+{
+  "name": "Standard Riichi Mahjong - Two Wind",
+  "player_count": 4,
+  "wall_tile_count": 136,
+  "dead_wall_tile_count": 14,
+  "dora_tile_count": 4,
+  "player_hand_size": 14,
+  "number_of_red_fives_per_suit": 3,
+  "wind_order": ["EAST", "SOUTH"],
+  "points_per_win": 25000,
+  "allow_robbing_the_kan": true,
+  "winning_rules": [
+    // Basic yaku that can be expressed without complex tile patterns
+    {
+      "name": "Ready Hand (Riichi)",
+      "description": "Concealed waiting hand declared at 1,000 points stake",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "requires_riichi": true,
+      "yaku_count": 1
+    },
+    {
+      "name": "One Shot (Ippatsu)",
+      "description": "Winning within the first un-interrupted set of turns after declaring riichi",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "is_uninterrupted_first_round_only": true,
+      "requires_riichi": true,
+      "yaku_count": 1
+    },
+    {
+      "name": "Double Ready (Daburu Riichi)",
+      "description": "Declaring riichi in the first set of turns of the hand",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "is_uninterrupted_first_round_only": true,
+      "requires_riichi": true,
+      "requires_riichi_in_first_round": true,
+      "yaku_count": 2
+    },
+    {
+      "name": "Fully Concealed Hand (Menzen Tsumo)",
+      "description": "Winning on a self-draw on a concealed hand",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "is_self_drawn_only": true,
+      "yaku_count": 1
+    },
+    {
+      "name": "Dragon Pon (Yakuhai)",
+      "description": "Pon/kan of dragons",
+      "is_winning_rule": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_DRAGON",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "Seat Wind (Yakuhai)",
+      "description": "Pon/kan in player's seat wind",
+      "is_winning_rule": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_SEAT_WIND",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "Prevalent Wind (Yakuhai)",
+      "description": "Pon/kan in the prevalent wind",
+      "is_winning_rule": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_PREVAILING_WIND",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3
+        }
+      ]
+    },
+    // After a Kan - situational yaku
+    {
+      "name": "After a Kan (Rinshan Kaihou)",
+      "description": "Winning on a replacement tile after declaring a kan",
+      "is_winning_rule": true,
+      "is_self_drawn_only": true,
+      "requires_replacement_tile_after_kan": true,
+      "yaku_count": 1
+    },
+    {
+      "name": "Under the Sea (Haitei)",
+      "description": "Winning on self-draw on the last tile in the wall",
+      "is_winning_rule": true,
+      "is_self_drawn_only": true,
+      "is_last_tile_drawn_only": true,
+      "yaku_count": 1
+    },
+    {
+      "name": "Under the River (Houtei)",
+      "description": "Winning on the discard after the last tile in the wall",
+      "is_winning_rule": true,
+      "is_last_tile_drawn_only": true,
+      "yaku_count": 1
+    },
+    {
+      "name": "Pinfu",
+      "description": "All chis, a valueless pair, and a two-sided wait",
+      "is_winning_rule": true,
+      "requires_two_sided_wait": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_NOT_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        },
+        { 
+          "reference_tile": "SPECIAL_NOT_HONOR",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "Pure Double Chi (Iipeikou)",
+      "description": "Two identical chis",
+      "is_winning_rule": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "All Simples (Tanyao Chuu)",
+      "description": "All sets are simples",
+      "is_winning_rule": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_NOT_TERMINAL_OR_HONOR",
+          "tile_set_type": "CONTAINS",
+          "set_count": 14
+        }
+      ]
+    },
+    {
+      "name": "Mixed Triple Chi (San Shoku Doujun)",
+      "description": "Three different sequences in different suits",
+      "is_winning_rule": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_UNIQUE_SUIT",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_SUIT",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_SUIT",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "Pure Straight (Itsu)",
+      "description": "Three consecutive chis in the same suit",
+      "is_winning_rule": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "Outside Hand (Chanta)",
+      "description": "At least one chi and all sets containing terminals/honors",
+      "is_winning_rule": true,
+      "yaku_count": 1,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_SUITED_TERMINAL",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "SPECIAL_TERMINAL_OR_HONOR",
+          "tile_set_type": "CONTAINS",
+          "set_count": 3,
+          "contains_count": 1
+        },
+        {
+          "reference_tile": "SPECIAL_TERMINAL_OR_HONOR",
+          "tile_set_type": "CONTAINS",
+          "set_count": 3,
+          "contains_count": 1
+        }
+      ]
+    },
+    {
+      "name": "Seven Pairs (Chi Toitsu)",
+      "description": "Seven different pairs",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_UNIQUE_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        }   
+      ]
+    },
+    {
+      "name": "Triple Pon (San Shoku Dokou)",
+      "description": "Three pons/kans of the same number in different suits",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_UNIQUE_SUIT",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_SUIT",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_SUIT",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        }
+      ]
+    },
+    {
+      "name": "Three Concealed Pons (San Ankou)",
+      "description": "Three concealed pons",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "concealed": true
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "concealed": true
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "concealed": true
+        }
+      ]
+    },
+    {
+      "name": "Three Kans (San Kan Tsu)",
+      "description": "Three kans",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 4
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 4
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 4
+        }
+      ]
+    },
+    {
+      "name": "All Pons (Toi-Toi Hou)",
+      "description": "All pons",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        }
+      ]
+    },
+    {
+      "name": "Half Flush (Honitsu)",
+      "description": "Half flush",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT",
+          "tile_set_type": "CONTAINS",
+          "set_count": 12
+        },
+        {
+          "reference_tile": "SPECIAL_HONOR",
+          "tile_set_type": "CONTAINS",
+          "set_count": 2
+        }
+      ]
+    },
+    {
+      "name": "Little Three Dragons (Shou Sangen)",
+      "description": "Little Three Dragons",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_UNIQUE_DRAGON",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_DRAGON",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_DRAGON",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        }
+      ]
+    },
+    {
+      "name": "All Terminals and Honors (Honroutou)",
+      "description": "All terminals and honors",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_TERMINAL_OR_HONOR",
+          "tile_set_type": "CONTAINS",
+          "set_count": 14
+        }
+      ]
+    },
+    {
+      "name": "Terminals in All Sets (Junchan)",
+      "description": "All sets contain terminals",
+      "is_winning_rule": true,
+      "yaku_count": 2,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_TERMINAL",
+          "tile_set_type": "CONTAINS",
+          "set_count": 3,
+          "max_size": 4,
+          "contains_count": 1
+        },
+        {
+          "reference_tile": "SPECIAL_TERMINAL",
+          "tile_set_type": "CONTAINS",
+          "set_count": 3,
+          "max_size": 4,
+          "contains_count": 1
+        },
+        {
+          "reference_tile": "SPECIAL_TERMINAL",
+          "tile_set_type": "CONTAINS",
+          "set_count": 3,
+          "max_size": 4,
+          "contains_count": 1
+        },
+        {
+          "reference_tile": "SPECIAL_TERMINAL",
+          "tile_set_type": "CONTAINS",
+          "set_count": 3,
+          "max_size": 4,
+          "contains_count": 1
+        },
+        {
+          "reference_tile": "SPECIAL_TERMINAL",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        }
+      ]
+    },
+    {
+      "name": "Twice Pure Double Chi (Ryan Peikou)",
+      "description": "Two pairs of identical chis",
+      "is_winning_rule": true,
+      "yaku_count": 3,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT_AND_NUMERIC",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT_AND_NUMERIC",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "Full Flush (Chinitsu)",
+      "description": "All tiles from one suit",
+      "is_winning_rule": true,
+      "yaku_count": 5,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_SAME_SUIT",
+          "tile_set_type": "CONTAINS",
+          "set_count": 14
+        }
+      ]
+    },
+    {
+      "name": "Blessing of Man (Renho)",
+      "description": "Winning on a discard in the very first un-interrupted set of turns",
+      "is_winning_rule": true,
+      "is_uninterrupted_first_round_only": true,
+      "yaku_count": 5
+    },
+    {
+      "name": "Thirteen Orphans (Kokushi Musou)",
+      "description": "Concealed hand with one of each terminal and honor tile plus one duplicate",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "is_yakuman": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_UNIQUE_TERMINAL_OR_HONOR",
+          "tile_set_type": "CONTAINS",
+          "set_count": 13
+        },
+        {
+          "reference_tile": "SPECIAL_TERMINAL_OR_HONOR",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 1
+        }
+      ]
+    },
+    {
+      "name": "Nine Gates (Chuuren Pooto)",
+      "description": "Concealed hand consisting of the tiles 1112345678999 in the same suit plus an extra tile",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "is_yakuman": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_SUITED_ONE",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "SPECIAL_SUITED_TWO",
+          "tile_set_type": "SEQUENCE",
+          "set_count": 7
+        },
+        {
+          "reference_tile": "SPECIAL_SUITED_NINE",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "Blessing of Heaven (Tenho)",
+      "description": "East winning on their initial deal",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "is_yakuman": true,
+      "requires_east_to_win_on_initial_deal": true
+    },
+    {
+      "name": "Blessing of Earth (Chiho)",
+      "description": "Winning on self-draw in the very first un-interrupted set of turns",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "is_self_drawn_only": true,
+      "is_uninterrupted_first_round_only": true,
+      "is_yakuman": true
+    },
+    {
+      "name": "Four Concealed Pons (Suu Ankou)",
+      "description": "Concealed hand with four concealed pons/kans",
+      "is_winning_rule": true,
+      "is_concealed_only": true,
+      "is_yakuman": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4,
+          "concealed": true
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4,
+          "concealed": true
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4,
+          "concealed": true
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4,
+          "concealed": true
+        }
+      ]
+    },
+    {
+      "name": "Four Kans (Suu Kan Tsu)",
+      "description": "Hand with four kans",
+      "is_winning_rule": true,
+      "is_yakuman": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 4
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 4
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 4
+        },
+        {
+          "reference_tile": "SPECIAL_ANY",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 4
+        }
+      ]
+    },
+    {
+      "name": "All Green (Ryuu Iisou)",
+      "description": "Hand composed entirely of green tiles",
+      "is_winning_rule": true,
+      "is_yakuman": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_GREEN",
+          "tile_set_type": "CONTAINS",
+          "set_count": 14
+        }
+      ]
+    },
+    {
+      "name": "All Terminals (Chinrouto)",
+      "description": "Hand composed entirely of terminal tiles",
+      "is_winning_rule": true,
+      "is_yakuman": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_TERMINAL",
+          "tile_set_type": "CONTAINS",
+          "set_count": 14
+        }
+      ]
+    },
+    {
+      "name": "All Honors (Tsuu Iisou)",
+      "description": "Hand composed entirely of honor tiles",
+      "is_winning_rule": true,
+      "is_yakuman": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_HONOR",
+          "tile_set_type": "CONTAINS",
+          "set_count": 14
+        }
+      ]
+    },
+    {
+      "name": "Big Three Dragons (Dai Sangen)",
+      "description": "Hand with three pons/kans of dragons",
+      "is_winning_rule": true,
+      "is_yakuman": true,
+      "has_scoring_liability": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "HONOR_RED_DRAGON",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "HONOR_WHITE_DRAGON",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3
+        },
+        {
+          "reference_tile": "HONOR_GREEN_DRAGON",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3
+        }
+      ]
+    },
+    {
+      "name": "Little Four Winds (Shou Suushii)",
+      "description": "Hand with three pons/kans of winds and a pair of winds",
+      "is_winning_rule": true,
+      "is_yakuman": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "SPECIAL_UNIQUE_WIND",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_WIND",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_WIND",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "SPECIAL_UNIQUE_WIND",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 2
+        }
+      ]
+    },
+    {
+      "name": "Big Four Winds (Dai Suushii)",
+      "description": "Hand with four pons/kans of winds",
+      "is_winning_rule": true,
+      "is_yakuman": true,
+      "has_scoring_liability": true,
+      "hand_pattern": [
+        {
+          "reference_tile": "HONOR_EAST",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "HONOR_SOUTH",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "HONOR_WEST",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        },
+        {
+          "reference_tile": "HONOR_NORTH",
+          "tile_set_type": "IDENTICAL",
+          "set_count": 3,
+          "max_size": 4
+        }
+      ]
+    }
+  ]
+}

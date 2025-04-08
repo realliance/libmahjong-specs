@@ -1,0 +1,81 @@
+syntax="proto3";
+
+import "./tile.proto";
+
+package libmahjong2;
+
+enum Wind {
+  EAST = 0;
+  SOUTH = 1;
+  WEST = 2;
+  NORTH = 3;
+}
+
+/// Represents the rules of a certain match
+message GameRules {
+  /// Ruleset name
+  string name = 1;
+  /// The number of players in the match. Usually 3 or 4 for riichi mahjong
+  uint32 player_count = 2;
+  /// The number of tiles in the wall. Includes the dead wall. Usually 136
+  uint32 wall_tile_count = 3;
+  /// The number of tiles in the dead wall. Cannot be greater than the wall tile count. Usually 14
+  uint32 dead_wall_tile_count = 4;
+  /// The number of dora tiles in the dead wall. Usually 4 for 4 players and 8 for 3 players
+  uint32 dora_tile_count = 5;
+  /// The number of tiles in the player's hand. Usually 14
+  uint32 player_hand_size = 6;
+  /// The number of red fives in the wall. Should be 0 to 4
+  uint32 number_of_red_fives_per_suit = 7;
+  /// The order of the wind rounds to play through. Usually just east, but for longer games can be east and south. Must be greater than 0
+  repeated Wind wind_order = 8;
+  /// The number of points for a win. Usually 25000 for riichi mahjong
+  uint32 points_per_win = 9;
+  /// Whether to allow robbing the kan, which is when a player steals from a melded kan and winds, therefore not revealing the next dora.
+  bool allow_robbing_the_kan = 10;
+  /// The rules that can trigger in a winning hand
+  repeated ScoringRule winning_rules = 11;
+}
+
+/// Represents a yaku, as in a hand (or partial hand) composition that gives points. May or may not be 
+/// a winning hand (such as a red five).
+message ScoringRule {
+  /// The name of the rule
+  string name = 1;
+  /// The description of the rule
+  string description = 2;
+  /// Whether this rule is a winning rule
+  bool is_winning_rule = 3;
+  /// The pattern that can trigger this rule. Ignored if requires_any_valid_hand_formation is true.
+  /// Every hand pattern set represents unique tiles in the hand. For example, two identical chows would require two sequences in this list.
+  repeated libmahjong2.tile.TileSet hand_pattern = 4;
+  /// Whether this rule is a yakuman
+  bool is_yakuman = 5;
+  /// Whether this rule is only applicable to a concealed hand
+  optional bool is_concealed_only = 6;
+  /// Whether this rule is only applicable to an open hand
+  optional bool is_open_only = 7;
+  /// Whether this rule is an extra fan if it is concealed
+  optional bool is_extra_fan_if_concealed = 8;
+  /// Whether this rule is only applicable to a self-drawn hand
+  optional bool is_self_drawn_only = 9;
+  /// Whether this rule is only applicable if the last tile from the wall was drawn
+  optional bool is_last_tile_drawn_only = 10;
+  /// Whether this rule is only applicable if it occurs during an uninterrupted first round
+  optional bool is_uninterrupted_first_round_only = 11;
+  /// Has scoring liability, which means the player who help form the final meld of this rule must pay all of the points. It is split evenly otherwise if it was formed via self draw.
+  optional bool has_scoring_liability = 12;
+  /// Whether this rule requires a two sided wait
+  optional bool requires_two_sided_wait = 13;
+  /// Whether this rules requires you to declare riichi
+  optional bool requires_riichi = 14;
+  /// Whether the riichi must be done in the first set of hands
+  optional bool requires_riichi_in_first_round = 15;
+  /// Whether this rule requires winning on the replacement tile after a kan
+  optional bool requires_replacement_tile_after_kan = 16;
+  /// Whether this rule requires east to win on their initial deal
+  optional bool requires_east_to_win_on_initial_deal = 17;
+  /// The number of yaku this rule is worth. Should be defined if not a yakuman.
+  optional uint32 yaku_count = 18;
+}
+
