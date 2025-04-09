@@ -1,0 +1,10 @@
+syntax="proto3";
+
+package libmahjong2.player;
+
+message Player {
+  // Player game id
+  uint32 player_id = 1;
+  // Player score
+  optional uint64 score = 2;
+}

@@ -1,15 +1,10 @@
 syntax="proto3";
 
+package libmahjong2.rules;
+
 import "./tile.proto";
+import "./wind.proto";
 
-package libmahjong2;
-
-enum Wind {
-  EAST = 0;
-  SOUTH = 1;
-  WEST = 2;
-  NORTH = 3;
-}
 
 /// Represents the rules of a certain match
 message GameRules {
@@ -28,7 +23,7 @@ message GameRules {
   /// The number of red fives in the wall. Should be 0 to 4
   uint32 number_of_red_fives_per_suit = 7;
   /// The order of the wind rounds to play through. Usually just east, but for longer games can be east and south. Must be greater than 0
-  repeated Wind wind_order = 8;
+  repeated libmahjong2.winds.Wind wind_order = 8;
   /// The number of points for a win. Usually 25000 for riichi mahjong
   uint32 points_per_win = 9;
   /// Whether to allow robbing the kan, which is when a player steals from a melded kan and winds, therefore not revealing the next dora.
