@@ -1,6 +1,6 @@
 syntax="proto3";
 
-package libmahjong2.player;
+package libmahjong2.client;
 
 message Player {
   // Player game id

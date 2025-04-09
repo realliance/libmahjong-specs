@@ -1,0 +1,32 @@
+syntax="proto3";
+
+package libmahjong2.rules;
+
+import "../winds.proto";
+import "./scoring_rule.proto";
+
+/// Represents the rules of a certain match
+message GameRules {
+  /// Ruleset name
+  string name = 1;
+  /// The number of players in the match. Usually 3 or 4 for riichi mahjong
+  uint32 player_count = 2;
+  /// The number of tiles in the wall. Includes the dead wall. Usually 136
+  uint32 wall_tile_count = 3;
+  /// The number of tiles in the dead wall. Cannot be greater than the wall tile count. Usually 14
+  uint32 dead_wall_tile_count = 4;
+  /// The number of dora tiles in the dead wall. Usually 4 for 4 players and 8 for 3 players
+  uint32 dora_tile_count = 5;
+  /// The number of tiles in the player's hand. Usually 14
+  uint32 player_hand_size = 6;
+  /// The number of red fives in the wall. Should be 0 to 4
+  uint32 number_of_red_fives_per_suit = 7;
+  /// The order of the wind rounds to play through. Usually just east, but for longer games can be east and south. Must be greater than 0
+  repeated libmahjong2.winds.Wind wind_order = 8;
+  /// The number of points for a win. Usually 25000 for riichi mahjong
+  uint32 points_per_win = 9;
+  /// Whether to allow robbing the kan, which is when a player steals from a melded kan and winds, therefore not revealing the next dora.
+  bool allow_robbing_the_kan = 10;
+  /// The rules that can trigger in a winning hand
+  repeated libmahjong2.rules.ScoringRule winning_rules = 11;
+}

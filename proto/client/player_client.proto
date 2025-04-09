@@ -2,7 +2,9 @@ syntax="proto3";
 
 package libmahjong2.client;
 
-import "./event.proto";
+import "../event/notify.proto";
+import "../event/action.proto";
+import "./round_start.proto";
 import "./player.proto";
 import "google/protobuf/empty.proto";
 

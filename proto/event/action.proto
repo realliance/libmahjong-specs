@@ -1,0 +1,35 @@
+syntax="proto3";
+
+package libmahjong2.event;
+
+import "../winds.proto";
+import "../tile/tile.proto";
+
+// Represents an action event, which is an event that you can perform
+message Action {
+  // Actions are events you can perform
+  enum ActionType {
+    // Discard a tile
+    DISCARD_TILE = 0;
+    // Call riichi
+    CALL_RIICHI = 1;
+    // Call kan
+    CALL_KAN = 2;
+    // Call pon
+    CALL_PON = 3;
+    // Call chi
+    CALL_CHI = 4;
+    // Call ron
+    CALL_RON = 5;
+    // Call tsumo
+    CALL_TSUMO = 6;
+    // Decline call
+    DECLINE_CALL = 7;
+  }
+
+  ActionType type = 1;
+  // The player seat that triggered the event
+  libmahjong2.winds.Wind player_seat = 2;
+  // The tile related to the event
+  libmahjong2.tile.Tile tile = 3;
+}

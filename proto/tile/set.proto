@@ -1,0 +1,31 @@
+syntax="proto3";
+
+package libmahjong2.tile;
+
+import "tile.proto";
+
+/// Represents a group of tiles, used in hand composition and scoring
+message TileSet {
+  /// Represents the type of a tile set
+  enum TileSetType {
+    /// All tiles in the set are identical
+    IDENTICAL = 0;
+    /// All tiles in the set are in sequence
+    SEQUENCE = 1;
+    /// The set contains a certain number of the reference tile
+    CONTAINS = 2;
+  }
+
+  /// The reference tile of the set. Usually the first (or only type) in the set
+  libmahjong2.tile.Tile reference_tile = 1;
+  /// The type of the set
+  TileSetType tile_set_type = 2;
+  /// The number of tiles in the set
+  uint32 set_count = 3;
+  /// For a contains, the number of tiles that need to match the reference tile. If not set, it is the same as set_count.
+  optional uint32 contains_count = 4;
+  /// For hands that can be pon or kan, this is the maximum size of the set.
+  optional uint32 max_size = 5;
+  /// Whether this set is concealed
+  optional bool concealed = 6;
+}

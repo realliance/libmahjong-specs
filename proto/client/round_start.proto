@@ -1,0 +1,19 @@
+syntax="proto3";
+
+package libmahjong2.client;
+
+import "../tile/tile.proto";
+import "../winds.proto";
+import "../client/player.proto";
+
+// Represents a round start event, which is an event that occurs at the beginning of a round
+message RoundStart {
+  // Your new hand
+  repeated libmahjong2.tile.Tile hand = 1;
+  // Your seat wind
+  libmahjong2.winds.Wind seat_wind = 2;
+  // The prevailing wind
+  libmahjong2.winds.Wind prevailing_wind = 3; 
+  // All players
+  repeated libmahjong2.client.Player players = 4;
+}
