@@ -40,6 +40,8 @@ enum NotifyType {
   RON_AVAILABLE = 14;
   // Calling a tsumo is available
   TSUMO_AVAILABLE = 15;
+  // Dora indicator
+  DORA = 16;
 }
 
 // Actions are events you can perform
