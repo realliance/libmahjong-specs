@@ -1,5 +1,5 @@
 # libmahjong-specs
-Specification crafting for a new riichi mahjong engine
+Specification crafting for the libmahjong mahjong engine
 
 # Contribution
 
