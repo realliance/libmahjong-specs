@@ -1,4 +1,4 @@
-# libmahjong2-specs
+# libmahjong-specs
 Specification crafting for a new riichi mahjong engine
 
 # Contribution
