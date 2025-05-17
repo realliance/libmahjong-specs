@@ -1,0 +1,100 @@
+name: Build and Publish Cap'n Proto Libraries
+
+on:
+  push:
+    branches: [ prototype ]
+    paths:
+      - 'proto/**'
+  workflow_dispatch: {}
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - language: rust
+            output_dir: capnp-rust
+            compiler_plugin: capnpc-rust
+          - language: cpp
+            output_dir: capnp-cpp
+            compiler_arg: -oc++
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install capnproto
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y capnproto
+
+      - name: Setup Rust toolchain
+        if: matrix.language == 'rust'
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          
+      - name: Install capnpc for Rust
+        if: matrix.language == 'rust'
+        run: cargo install capnpc
+
+      - name: Create output directory
+        run: mkdir -p ${{ matrix.output_dir }}
+        
+      - name: Find and compile all .capnp files
+        run: |
+          find proto -name "*.capnp" -type f | while read schema_file; do
+            if [ "${{ matrix.language }}" == "rust" ]; then
+              # For Rust
+              capnp compile -o${{ matrix.compiler_plugin }} --src-prefix=proto -I=proto "$schema_file"
+            else
+              # For C++
+              output_file=$(basename "$schema_file")
+              capnp compile ${{ matrix.compiler_arg }} --src-prefix=proto -I=proto "$schema_file"
+              # Move generated files to the output directory
+              mv "${output_file}.h" "${output_file}.c++" ${{ matrix.output_dir }}/ 2>/dev/null || true
+            fi
+          done
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Create and switch to dist branch
+        run: |
+          dist_branch="dist/${{ matrix.language }}"
+          
+          # Check if branch exists on remote
+          if git ls-remote --heads origin $dist_branch | grep -q $dist_branch; then
+            # If it exists, create a new local branch tracking the remote one
+            git checkout -b $dist_branch --track origin/$dist_branch
+            # Remove all existing files to start fresh
+            git rm -rf .
+            git clean -fdx
+          else
+            # If it doesn't exist, create a new orphan branch
+            git checkout --orphan $dist_branch
+            git rm -rf .
+          fi
+          
+          # Copy the generated files to the root directory
+          if [ "${{ matrix.language }}" == "rust" ]; then
+            # For Rust, the files are generated in the current directory
+            find . -name "*.rs" -not -path "./target/*" | xargs -I{} cp {} .
+          else
+            # For C++, copy from the output directory
+            cp -r ${{ matrix.output_dir }}/* .
+          fi
+          
+          # Add a README
+          echo "# Generated Cap'n Proto code for ${{ matrix.language }}" > README.md
+          echo "Last updated: $(date)" >> README.md
+          
+          # Add, commit, and push
+          git add -A
+          git commit -m "Update generated code" || echo "No changes to commit"
+          git push -f origin $dist_branch 
