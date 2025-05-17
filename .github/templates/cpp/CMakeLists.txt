@@ -4,14 +4,14 @@ project(libmahjong-capnp VERSION 0.1.0 LANGUAGES CXX)
 # Find Cap'n Proto package
 find_package(CapnProto REQUIRED)
 
-# Collect all source and header files
-file(GLOB SOURCES "*.cpp")
-file(GLOB HEADERS "*.h")
+# Collect all source and header files in src/ directory
+file(GLOB SOURCES "src/*.cpp")
+file(GLOB HEADERS "src/*.h")
 
 # Create library target
 add_library(libmahjong-capnp ${SOURCES} ${HEADERS})
 target_include_directories(libmahjong-capnp PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>
 )
 
@@ -30,7 +30,8 @@ install(TARGETS libmahjong-capnp
     INCLUDES DESTINATION include
 )
 
-install(FILES ${HEADERS} DESTINATION include)
+# Install header files to include directory
+install(FILES ${HEADERS} DESTINATION include/libmahjong-capnp)
 
 # Export targets
 install(EXPORT libmahjong-capnp-targets

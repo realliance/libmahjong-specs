@@ -108,9 +108,9 @@ jobs:
             cp -r /tmp/capnp-save/* . 2>/dev/null || true
           else
             # For C++
-            mkdir -p ${{ matrix.output_dir }}
-            cp -r /tmp/capnp-save/* ${{ matrix.output_dir }}/ 2>/dev/null || true
-            cp -r ${{ matrix.output_dir }}/* .
+            # Create src directory instead of copying to root
+            mkdir -p src
+            cp -r /tmp/capnp-save/* src/ 2>/dev/null || true
             
             # Copy the CMake template files
             cp -f .github/templates/cpp/CMakeLists.txt .
