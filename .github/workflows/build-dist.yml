@@ -127,6 +127,9 @@ jobs:
             # Copy template files
             cp -f .github/templates/rust/Cargo.toml .
             
+            # Create .gitignore file for Rust
+            echo "target/" > .gitignore
+            
             # Run cargo check to generate Cargo.lock
             cargo check --quiet
           else
