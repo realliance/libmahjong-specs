@@ -2,7 +2,7 @@ name: Build and Publish Cap'n Proto Libraries
 
 on:
   push:
-    branches: [ prototype ]
+    branches: [ main ]
     paths:
       - 'proto/**'
   workflow_dispatch: {}
