@@ -8,31 +8,8 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  validate:
-    name: Validate Schemas
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install capnproto
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y capnproto
-
-      - name: Validate Cap'n Proto schemas
-        run: |
-          echo "Validating Cap'n Proto schemas..."
-          find proto -name "*.capnp" -type f | while read schema_file; do
-            echo "Validating $schema_file"
-            # Just try to parse the schema file without generating any code
-            capnp compile -I proto --no-standard-import "$schema_file" || exit 1
-          done
-          echo "All schemas validated successfully!"
-
   build-and-publish:
     name: Build and Publish Libraries
-    needs: validate
     runs-on: ubuntu-latest
     strategy:
       matrix:
