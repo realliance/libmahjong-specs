@@ -91,13 +91,15 @@ jobs:
           if git ls-remote --heads origin $dist_branch | grep -q $dist_branch; then
             # If it exists, create a new local branch tracking the remote one
             git checkout -b $dist_branch --track origin/$dist_branch
-            # Remove all existing files to start fresh
-            git rm -rf .
-            git clean -fdx
+            
+            # Selective cleanup - only remove generated code files, not directories like .github
+            find . -type f -not -path "./.git/*" -not -path "./.github/*" -delete
           else
             # If it doesn't exist, create a new orphan branch
             git checkout --orphan $dist_branch
-            git rm -rf .
+            # For orphan branch, we need to remove files but keep .github
+            find . -type f -not -path "./.git/*" -not -path "./.github/*" -delete
+            find . -type d -empty -not -path "./.git*" -not -path "./.github*" -delete
           fi
           
           # Copy the generated files from the temporary directory
@@ -110,7 +112,7 @@ jobs:
             cp -r /tmp/capnp-save/* ${{ matrix.output_dir }}/ 2>/dev/null || true
             cp -r ${{ matrix.output_dir }}/* .
             
-            # Copy the CMake template files instead of generating with echo
+            # Copy the CMake template files
             cp -f .github/templates/cpp/CMakeLists.txt .
             mkdir -p cmake
             cp -f .github/templates/cpp/cmake/libmahjong-capnp-config.cmake.in cmake/
