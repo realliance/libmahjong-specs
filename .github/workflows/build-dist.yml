@@ -49,11 +49,11 @@ jobs:
           find proto -name "*.capnp" -type f | while read schema_file; do
             if [ "${{ matrix.language }}" == "rust" ]; then
               # For Rust
-              capnp compile -o${{ matrix.compiler_plugin }} --src-prefix=proto -I=proto "$schema_file"
+              capnp compile -o${{ matrix.compiler_plugin }} --src-prefix=proto -I proto "$schema_file"
             else
               # For C++
               output_file=$(basename "$schema_file")
-              capnp compile ${{ matrix.compiler_arg }} --src-prefix=proto -I=proto "$schema_file"
+              capnp compile ${{ matrix.compiler_arg }} --src-prefix=proto -I proto "$schema_file"
               # Move generated files to the output directory
               mv "${output_file}.h" "${output_file}.c++" ${{ matrix.output_dir }}/ 2>/dev/null || true
             fi
