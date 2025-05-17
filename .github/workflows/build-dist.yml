@@ -84,8 +84,13 @@ jobs:
           if [ "${{ matrix.language }}" == "rust" ]; then
             find . -name "*.rs" -not -path "./target/*" -exec cp {} /tmp/capnp-save/ \;
           else
+            # Move files instead of copying them to avoid the untracked files error
             cp -r ${{ matrix.output_dir }}/* /tmp/capnp-save/ 2>/dev/null || true
+            rm -rf ${{ matrix.output_dir }}/* 2>/dev/null || true
           fi
+          
+          # Clean untracked files to avoid checkout errors
+          git clean -fd
           
           # Check if branch exists on remote
           if git ls-remote --heads origin $dist_branch | grep -q $dist_branch; then
