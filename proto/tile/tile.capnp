@@ -6,46 +6,46 @@
 # Bit 4: Red Five (1 if red five, 0 otherwise)
 # Bits 3-0 (LSB): Rank (1-9 for numbered suit tiles, 1-7 for honor tiles)
 enum Tile {
-  none @0 = 0x00;
+  none @0;
 
-  pinOne @1 = 0xC1;
-  pinTwo @2 = 0x42;
-  pinThree @3 = 0x43;
-  pinFour @4 = 0x44;
-  pinFive @5 = 0x45;
-  pinRedFive @6 = 0x55;
-  pinSix @7 = 0x46;
-  pinSeven @8 = 0x47;
-  pinEight @9 = 0x48;
-  pinNine @10 = 0xC9;
+  pinOne @1;
+  pinTwo @2;
+  pinThree @3;
+  pinFour @4;
+  pinFive @5;
+  pinRedFive @6;
+  pinSix @7;
+  pinSeven @8;
+  pinEight @9;
+  pinNine @10;
 
-  souOne @11 = 0xA1;
-  souTwo @12 = 0x22;
-  souThree @13 = 0x23;
-  souFour @14 = 0x24;
-  souFive @15 = 0x25;
-  souRedFive @16 = 0x35;
-  souSix @17 = 0x26;
-  souSeven @18 = 0x27;
-  souEight @19 = 0x28;
-  souNine @20 = 0xA9;
+  souOne @11;
+  souTwo @12;
+  souThree @13;
+  souFour @14;
+  souFive @15;
+  souRedFive @16;
+  souSix @17;
+  souSeven @18;
+  souEight @19;
+  souNine @20;
 
-  manOne @21 = 0xE1;
-  manTwo @22 = 0x62;
-  manThree @23 = 0x63;
-  manFour @24 = 0x64;
-  manFive @25 = 0x65;
-  manRedFive @26 = 0x75;
-  manSix @27 = 0x66;
-  manSeven @28 = 0x67;
-  manEight @29 = 0x68;
-  manNine @30 = 0xE9;
+  manOne @21;
+  manTwo @22;
+  manThree @23;
+  manFour @24;
+  manFive @25;
+  manRedFive @26;
+  manSix @27;
+  manSeven @28;
+  manEight @29;
+  manNine @30;
 
-  honorEast @31 = 0x01;
-  honorSouth @32 = 0x02;
-  honorWest @33 = 0x03;
-  honorNorth @34 = 0x04;
-  honorRedDragon @35 = 0x05;
-  honorWhiteDragon @36 = 0x06;
-  honorGreenDragon @37 = 0x07;
+  honorEast @31;
+  honorSouth @32;
+  honorWest @33;
+  honorNorth @34;
+  honorRedDragon @35;
+  honorWhiteDragon @36;
+  honorGreenDragon @37;
 } 
