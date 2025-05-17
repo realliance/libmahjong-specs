@@ -79,6 +79,14 @@ jobs:
         run: |
           dist_branch="dist/${{ matrix.language }}"
           
+          # Save the generated files to a temporary directory outside of git
+          mkdir -p /tmp/capnp-save
+          if [ "${{ matrix.language }}" == "rust" ]; then
+            find . -name "*.rs" -not -path "./target/*" -exec cp {} /tmp/capnp-save/ \;
+          else
+            cp -r ${{ matrix.output_dir }}/* /tmp/capnp-save/ 2>/dev/null || true
+          fi
+          
           # Check if branch exists on remote
           if git ls-remote --heads origin $dist_branch | grep -q $dist_branch; then
             # If it exists, create a new local branch tracking the remote one
@@ -92,12 +100,14 @@ jobs:
             git rm -rf .
           fi
           
-          # Copy the generated files to the root directory
+          # Copy the generated files from the temporary directory
           if [ "${{ matrix.language }}" == "rust" ]; then
-            # For Rust, the files are generated in the current directory
-            find . -name "*.rs" -not -path "./target/*" | xargs -I{} cp {} .
+            # For Rust
+            cp -r /tmp/capnp-save/* . 2>/dev/null || true
           else
-            # For C++, copy from the output directory
+            # For C++
+            mkdir -p ${{ matrix.output_dir }}
+            cp -r /tmp/capnp-save/* ${{ matrix.output_dir }}/ 2>/dev/null || true
             cp -r ${{ matrix.output_dir }}/* .
             
             # Copy the CMake template files instead of generating with echo
