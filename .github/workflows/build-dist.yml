@@ -53,10 +53,20 @@ jobs:
               capnp compile -o ${{ matrix.compiler_plugin }} --src-prefix=proto -I proto "$schema_file"
             else
               # For C++
-              output_file=$(basename "$schema_file")
+              base_name=$(basename "$schema_file" .capnp)
               capnp compile ${{ matrix.compiler_arg }} --src-prefix=proto -I proto "$schema_file"
+              
+              # Rename the generated files to proper extensions
+              for file in $(find . -name "$(basename "$schema_file").c++" -o -name "$(basename "$schema_file").h"); do
+                if [[ "$file" == *.h ]]; then
+                  mv "$file" "${base_name}.h"
+                elif [[ "$file" == *.c++ ]]; then
+                  mv "$file" "${base_name}.cpp"
+                fi
+              done
+              
               # Move generated files to the output directory
-              mv "${output_file}.h" "${output_file}.c++" ${{ matrix.output_dir }}/ 2>/dev/null || true
+              mv "${base_name}.h" "${base_name}.cpp" ${{ matrix.output_dir }}/ 2>/dev/null || true
             fi
           done
 
@@ -89,6 +99,11 @@ jobs:
           else
             # For C++, copy from the output directory
             cp -r ${{ matrix.output_dir }}/* .
+            
+            # Copy the CMake template files instead of generating with echo
+            cp -f .github/templates/cpp/CMakeLists.txt .
+            mkdir -p cmake
+            cp -f .github/templates/cpp/cmake/libmahjong-capnp-config.cmake.in cmake/
           fi
           
           # Add a README
