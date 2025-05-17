@@ -105,7 +105,25 @@ jobs:
           # Copy the generated files from the temporary directory
           if [ "${{ matrix.language }}" == "rust" ]; then
             # For Rust
-            cp -r /tmp/capnp-save/* . 2>/dev/null || true
+            # Create src directory and move files there
+            mkdir -p src
+            
+            # Generate mod.rs file dynamically based on module names
+            echo "// Auto-generated mod.rs file" > src/mod.rs
+            echo "// This file re-exports all modules from the capnp generated code" >> src/mod.rs
+            
+            # Copy .rs files to src directory and add pub mod entries to mod.rs
+            for rs_file in $(find /tmp/capnp-save -name "*.rs"); do
+              base_name=$(basename "$rs_file" .rs)
+              cp "$rs_file" src/
+              echo "pub mod $base_name;" >> src/mod.rs
+            done
+            
+            # Copy template files
+            cp -f .github/templates/rust/Cargo.toml .
+            
+            # Run cargo check to generate Cargo.lock
+            cargo check --quiet
           else
             # For C++
             # Create src directory instead of copying to root

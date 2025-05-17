@@ -1,0 +1,9 @@
+[package]
+name = "libmahjong-specs"
+version = "0.1.0"
+edition = "2021"
+description = "Cap'n Proto generated code for the libmahjong specs"
+repository = "https://github.com/your-organization/libmahjong-specs"
+
+[dependencies]
+capnp = "0.21"
