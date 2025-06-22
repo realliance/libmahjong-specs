@@ -1,2 +1,2 @@
 # Generated Cap'n Proto code for cpp
-Last updated: Sat May 17 22:57:59 UTC 2025
+Last updated: Sun Jun 22 22:55:46 UTC 2025
