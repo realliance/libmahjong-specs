@@ -1,2 +1,2 @@
 # Generated Cap'n Proto code for rust
-Last updated: Sat May 17 22:58:15 UTC 2025
+Last updated: Sun Jun 22 22:56:01 UTC 2025
